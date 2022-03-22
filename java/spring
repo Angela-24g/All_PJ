@@ -1,0 +1,48 @@
+import java.util.Timer;
+import java.util.TimerTask;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+
+@EnableScheduling
+@Scheduled(fixedRate =10*60*1000, initialDelay = 500)
+public class scheduling(){
+
+	private Timer timer=new Timer();
+	TimerTask task=new TimerTask(){
+		
+		@Override
+		public void run(){
+			log.info("Timer:end {}", Utils.getCurStrDateTime());
+			timer.cancel();		
+		}
+	};
+	timer.schedule(task,20000);
+	}
+
+/* 
+	설명 1
+	@EnableScheduling 어노테이션을 씀으로써, 해당 코드는 스케쥴링을 하겠다는 것을 선언
+	@Scheduled(fixedRate =10*60*1000, initialDelay = 500)
+	
+	 > 내용
+		fixedRate: milliseconds 단위, 이전 작업이 수행되기 시작한 시점으로부터 고정된 시간을 설정
+		initialDelay: 최초 실행하고 0.5초 있다가 해당 코드를 실행하겠다는 뜻(초기 지연 시간을 설정함)
+		
+	 * 정리: 첫 스프링부트가 시작되고 0.5초 대기 후 바로 수행 및 10분마다 수행(10*60*1000)
+    
+	설명 2
+	프로세스: 각 field를 읽고나서 timertask 함수를 읽고 먼저 timer.schedule를 일이 시작되고 20초동안 실행이 됨 > 만약 20초가 만료가 되면 run()함수로 들어가 타이머를 취소함(timer.cancel())
+	타이머를 초기화하려면, run 함수 안으로 동작시켜야 한다.
+
+	설명 3
+	타이머 - 타이머 스케쥴의 표현은 여러가지가 있다. ((task,20000) 등)
+			단발성 실행과 연발성 실행으로 나뉨
+			
+			ex1) (task,20000) -> (TimerTask task, long Delay) : 이는, 20초 후에 run함수를 동작
+					(TimerTask task, long Delay, long period) : ex) (task, 10000, 2000) 이는, 2초마다 10초동안 task를 동작시키고 만료 후 run함수를 동작
+					
+	스케쥴링 - 스케쥴링의 표현에도 여러가지가 있다.(앞서 나온, fixedRate, initialDelay가 예)
+		예) fixedDelay : milliseconds 단위로, 이전 작업이 끝난 시점으로 부터 고정된 시간을 설정
+
+*/
+
