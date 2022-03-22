@@ -1,0 +1,201 @@
+log 남기기
+설명 1. log를 쓸 수 있는 환경
+   1) pom.xml
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-access</artifactId>
+         <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-classic</artifactId>
+         <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>ch.qos.logback</groupId>
+         <artifactId>logback-core</artifactId>
+         <version>${logback.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>jcl-over-slf4j</artifactId>
+         <version>${jcl.slf4j.version}</version>
+      </dependency>
+
+   2) logback.xml(이 xml은 해당 환경에 맞춰서 설정하면 됨) - resources 디렉토리 아래에 만들면 
+   
+   <?xml version="1.0" encoding="UTF-8"?>
+   <configuration scan="true" scanPeriod="60 seconds"> 
+    <property name="LOG_DIR" value="log" />
+    <property name="MAX_FILE_SIZE" value="50MB" />
+    <property name="MAX_HISTORY" value="30" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger.%method:%line - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="APPLICATION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="DB" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/db.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/db.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>    
+
+    <appender name="KAFKA" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/kafka.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/kafka.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+   
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>clientId</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+         
+        <sift>
+           <appender name="FILE-${clientId}"   class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_DIR}/terminals/${clientId}.log</file>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+               <Pattern> 
+                  %d{yyyy-MM-dd HH:mm:ss.SSS},%msg%n
+               </Pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                  <fileNamePattern>${LOG_DIR}/terminals/%d{yyyy-MM-dd}/${clientId}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      
+                  <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                      <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+                  </timeBasedFileNamingAndTriggeringPolicy>
+      
+                  <maxHistory>${MAX_HISTORY}</maxHistory>
+              </rollingPolicy>   
+           </appender>
+      </sift>
+   </appender>
+        <logger name="name.service.LogService" level="debug" additivity="false">
+         <!-- <appender-ref ref="CONSOLE" /> -->
+         <appender-ref ref="SIFT" />        
+      </logger>
+      
+      <logger name="name.verif" level="debug" additivity="false">        
+         <appender-ref ref="CONSOLE" />
+         <appender-ref ref="APPLICATION" />
+      </logger>
+      
+      <logger name="name.mapper" level="info" additivity="false">        
+         <appender-ref ref="CONSOLE" />
+         <appender-ref ref="DB" />
+      </logger>
+      
+      <logger name="name.kafka" level="debug" additivity="false">        
+         <appender-ref ref="CONSOLE" />
+         <appender-ref ref="KAFKA" />
+      </logger>
+       <logger name="ch.qos.logback" level="error" additivity="false">
+         <appender-ref ref="CONSOLE" />
+         <appender-ref ref="APPLICATION" />
+      </logger>    
+
+설명 2. 실제 활용 예제
+import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+ > 로그를 남길 수 있는 어노테이션
+ 
+ Logger logger = LoggerFactory.getLogger("chapters.introduction.HelloWorld2"); //이거는 회사 로거 부분 참고해서 수정하기
+
+ log.info("App:run"); > 얘는 sysout처럼 로그를 남길 수 있다(위의 설정처럼 console에 하겠다 하면 콘솔에서 데이터 로그가 찍힌다.)
+ log.info("data[]",data); > 이렇게 함으로써, data[data] 이런식으로 데이터를 나타낼 수 있다.
+
+
+설명 3. 설명
+/* 
+1) Log : 자바의 오픈소스 로깅 프레임워크 
+spring-boot-starter-web 안에 spring-boot-starter-logging에 구현체가 있다
+
+위의 예제는, 카프카와 db, 로그 등 다방면의 기술을 활용하는데
+만약, yml파일이 있다면(logback X): yml 형식대로 파일 적용함(반대일 경우에는 반대와 같이 적용됨)
+yml 파일과 logback.xml 파일이 둘다 있다면, yml의 설정파일을 적용 후 xml파일이 적용됨
+
+2)  <configuration scan="true" scanPeriod="60 seconds"> 
+이는, 60초 주기마다 로그 파일이 바뀌었는지 확인(logback.xml)하고 바뀌었으면 프로그램을 갱신(업데이트)
+
+3)   <appender-ref ref="CONSOLE" />, <appender-ref ref="APPLICATION" />
+
+   log의 형태를 설정, 로그 메시지가 출력될 대상을 결정하는 요소(콘솔에 출력할지, 파일로 출력 할지 등의 설정)
+
+4)  <fileNamePattern>${LOG_DIR}/terminals/%d{yyyy-MM-dd}/${clientId}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+%d : 로그 기록시간
+%l: 로깅이 발생한 caller(호출자)의 정보
+
+그 외(출처: https://kwonnam.pe.kr/wiki/java/log4j/pattern)
+
+%5p : 우측 정렬로 로그 레벨을 남김. 로그레벨이 5글자가 안되면 왼쪽에 공백을 추가하여 5글자 맞춤.
+%-5p : 좌측 정렬.
+%p: debug, info, warn, error, fatal 등의 priority 가 출력
+%m: 로그내용이 출력
+%t: 로그이벤트가 발생된 쓰레드의 이름을 출력
+%%: % 표시를 출력
+%n: 플랫폼 종속적인 개행문자가 출력된다. rn 또는 n 일것이다.
+%c: 카테고리를 표시 예) 카테고리가 a.b.c 처럼 되어있다면 %c{2}는 b.c가 출력됩니다.
+%C: 클래스명을 표시 예)클래스구조가 org.apache.xyz.SomeClass 처럼 되어있다면 %C{2}는 xyz.SomeClass 가 출력됩니다
+%F: 로깅이 발생한 프로그램 파일명을 나타냅니다.
+%L: 로깅이 발생한 caller의 라인수:
+%M: 로깅이 발생한 method 이름
+%r: 어플리케이션 시작 이후 부터 로깅이 발생한 시점의 시간(milliseconds)
+%x: 로깅이 발생한 thread와 관련된 NDC(nested diagnostic context)를 출력합니다.
+%X: 로깅이 발생한 thread와 관련된 MDC(mapped diagnostic context)를 출력합니다. %X{key} 
+
+
+*/
+
+
+ 
+ 
+ 
+ 
