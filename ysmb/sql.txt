@@ -1,0 +1,69 @@
+board
+--------------------------------------------------------------------
+CREATE TABLE `board` (
+  `num` int(11) NOT NULL AUTO_INCREMENT,
+  `writer` varchar(30) NOT NULL,
+  `subject` varchar(40) NOT NULL,
+  `regdate` datetime DEFAULT NULL,
+  `readcount` int(11) DEFAULT '0',
+  `ref` int(11) NOT NULL,
+  `re_step` int(11) NOT NULL,
+  `re_level` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `ip` varchar(20) NOT NULL,
+  `password` int(11) DEFAULT '0',
+  `pstate` varchar(6) DEFAULT NULL,
+  PRIMARY KEY (`num`)
+)
+
+member
+-----------------------------------------------------------------------
+CREATE TABLE `member` (
+  `id` varchar(20) NOT NULL,
+  `pw` varchar(15) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `tel` varchar(14) NOT NULL,
+  `zipcode` varchar(10) NOT NULL,
+  `addr` varchar(50) NOT NULL,
+  `addr2` varchar(30) NOT NULL,
+  `regdate` date NOT NULL,
+  `mno` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`mno`)
+)
+
+comment
+------------------------------------------------------------------------
+CREATE TABLE `comment` (
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `contents` varchar(100) DEFAULT NULL,
+  `wdate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `writer` int(11) NOT NULL,
+  `board_no` int(11) NOT NULL,
+  PRIMARY KEY (`no`)
+)
+
+
+imgs
+------------------------------------------------------
+CREATE TABLE `imgs` (
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `bno` int(11) NOT NULL,
+  `url` varchar(2000) DEFAULT NULL,
+  `thumb` varchar(2000) DEFAULT '0',
+  `document` int(11) DEFAULT '0',
+  `iwdate` datetime, 
+  PRIMARY KEY (`no`)
+) 
+nboard
+------------------------------------------------------------
+
+CREATE TABLE `nboard` (
+  `no` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) DEFAULT NULL,
+  `ncontent` varchar(1000) DEFAULT NULL,
+  `nwdate` datetime DEFAULT NULL,
+  `document` int(11) DEFAULT '0',
+  `rcount` int(11) DEFAULT '0',
+  PRIMARY KEY (`no`)
+)

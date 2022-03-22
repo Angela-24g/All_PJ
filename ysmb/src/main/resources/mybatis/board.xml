@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 매핑시키는 IMapperDAO 부분이 여기다! -->
+
+<mapper namespace="board">
+	
+	<!-- 최대 글번호 얻기 -->
+	<select id="numMax" resultType="Integer">
+		select max(num) from board
+	</select>
+	
+	<!-- 답글 끼워넣기 위치 확보(답글달기) -->
+	<update id="reStep" parameterType="Board77">    <!-- re_Step이 더 큰거는 뒤로 미뤄나라! -->
+		update board set re_step=re_step+1   <!-- 댓글에 대댓글을 달게되면 그림 상으로 원 글 아래에 댓글(대댓글3-얘는 원글에 댓글을 다는 것) 댓글(대댓글2) 댓글(대댓글4-댓글에 댓글다는 것) 그래서 +1을 한다.-->
+		where ref=#{ref} and re_step > #{re_step}
+	</update>
+	
+	<!-- insert 글쓰기, 글쓴이 답글쓰기 -->
+	<insert id="insertDao" parameterType="Board77"> <!-- 글 번호는 oracle 줘야 한다 -->
+		insert into board(writer, subject, regdate, ref, re_step, re_level, content, ip, pstate, password) values(#{writer},#{subject},NOW(),#{ref},#{re_step},#{re_level},#{content},#{ip},#{pstate},#{password})
+	</insert>
+	
+	<!-- 글 개수 -->
+	<select id="countDao" resultType="int">
+		select count(*) from board;
+	</select>
+
+	<!-- 글 리스트 -->
+	<select id="listDao" parameterType="java.util.Map" resultType="co.kr.ysmb.dto.BoardDTO">   <!-- dto로 작업하기 좀 그런거는 map을 이용한다. -->
+		select * from board order by ref desc, re_step asc limit #{start}, #{cnt}
+	</select>       <!-- ref: 그룹으로 묶다. re_step: 그룹으로 묶여진 글 순서! -->
+	
+	
+	<!-- 조회수 증가 -->
+	<update id="readcountDao" parameterType="Integer">
+		update board set readcount = readcount+1 where num=#{num}
+	</update>
+	
+	<!-- 글 내용 보기, 글 수정 폼 -->
+	<select id="getBoard" parameterType="Integer" resultType="co.kr.ysmb.dto.BoardDTO">
+		select * from board where num=#{num}
+	</select>
+	
+	<!-- 이름가져오기(해당 번호를 통해 가져오기) -->
+	
+	<!-- DB 글 수정 -->
+	<update id="updateDao" parameterType="co.kr.ysmb.dto.BoardDTO">
+		update board set writer=#{writer},subject=#{subject},content=#{content} where num=#{num} 
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteDao" parameterType="int">
+		delete from board where num=#{num} 
+	</delete>
+	
+</mapper>

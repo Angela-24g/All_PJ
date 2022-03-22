@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* 초기화 */
+@import url(//cdn.jsdelivr.net/nanumsquare/1.0/nanumsquare.css);
+*{margin: 0; padding:0;}
+html {overflow-y:scroll}
+body { min-width: 100%; max-width: 1920px; margin:0 auto;padding:0;font-size:0.875em;font-family: 'NanumSquare', sans-serif, '맑은 고딕'; }
+html, h1, h2, h3, h4, h5, h6, form, fieldset, img {margin:0;padding:0;border:0}
+h1, h2, h3, h4, h5, h6 {font-size:1em;font-family: 'NanumSquare', sans-serif, '맑은 고딕'; }
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display:block}
+ul {margin:0;padding:0;list-style:none}
+legend {position:absolute;margin:0;padding:0;font-size:0;line-height:0;text-indent:-9999em;overflow:hidden}
+label, input, button, select, img {vertical-align:middle}
+input, button {margin:0;padding:0;font-family: 'NanumSquare', sans-serif, '맑은 고딕'; font-size:1em}
+button {cursor:pointer}
+textarea, select {font-family: 'NanumSquare', sans-serif, '맑은 고딕'; font-size:1em}
+select {margin:0}
+p {margin:0;padding:0;word-break:break-all;line-height: 1.6em;}
+hr {display:none}
+pre {overflow-x:hidden;font-size:1.1em}
+a:link, a:visited {color:#000;text-decoration:none}
+a:hover, a:focus, a:active {color:#000;text-decoration:underline}
+button{ outline: none; border: none; cursor: pointer;}
+img, fieldset{ border: 0; outline: none;}
+li{list-style:none;}
+img{ /* width: 100%; */ border:0;}
+a{display: inline-block;text-decoration: none;}
+input[type="submit"],input[type="button"],input[type="reset"] {cursor:pointer}
+
+/* 공통 영역 */
+.header, .wrapper, .footer{ width: 100%; position: relative; overflow: hidden;}
+.header{ border-bottom: 1px solid #000;}
+.wrapper{ background-color: rgb(252, 252, 252);}
+.footer{ background-color: #000; padding: 40px 0;}
+.inner_wrap{min-width: 900px;width: 90%;max-width: 1100px;margin: 0 auto;}
+.clear::after{content:''; display: block; clear:both;}
+
+/* 상단영역 */
+.gnb_top_ul{ float: right; width: auto;}
+.gnb_top_li{ float: left; text-align: right; margin: 0 0 0 10px; line-height: 30px;}
+.gnb_top_a{ display: block; font-size: 13px; line-height: 30px; color: #333;}
+
+.gnb{ width: 100%;}
+.gnb .logo{width: 200px;float: left;}
+.gnb .logo_link{display: block;height: 80px;}
+.gnb .logo_link img{ width: auto; height: 100%;}
+.gnb .gnb_ul{width: calc(100% - 200px);float: right;}
+.gnb .gnb_li{float: left;width: 20%;text-align: right;line-height: 60px;}
+.gnb .gnb_a{ display: block; font-size: 16px; line-height: 60px; color: #333;}
+
+/* 메인 본문영역 */
+aside{width: 200px;float: left;border-right: 1px solid #000;box-sizing: border-box;height: calc(100vh - 170px);}
+section{width: calc(100% - 200px);float: left;padding: 40px 20px;box-sizing: border-box;}
+article{width: auto;min-height: 150px;/* margin: 10px; */padding: 20px;box-sizing: border-box;}
+.tit{ text-align: center;}
+
+/* slick-article */
+.slick-article{width: 100%;position: relative;overflow: hidden;}
+.slick-article .slick-arrow{width: 80px;height: 37px;position: absolute;bottom: 0;/* margin-top: 50%; */z-index: 99;background-color: 000;color: #fff;}
+.slick-article .slick-prev{ left:0;}
+.slick-article .slick-next{ right:0;}
+.slick-article .slick-dots{ text-align: center;}
+.slick-article .slick-dots li{ display: inline-block; background-color: #fff; border: 1px solid #000; border-radius: 10px; margin: 10px;}
+.slick-article .slick-dots li.slick-active{ background-color: #000; border: 1px solid #000;}
+.slick-article .slick-dots li button{font-size: 0px;width: 15px;height: 15px;background: none;}
+.slick-article .slick-slider{}
+.slick-article .slick-list{}
+.slick-article .slick-slide{ height: 500px; background-position: center; background-size: cover;}
+.slick-article .slick-slide:nth-child(odd){ background-image: url('/resources/imgs/home_slick01.jpg');}
+.slick-article .slick-slide:nth-child(even){ background-image: url('/resources/imgs/home_slick02.jpg');}
+
+/* 사이드바 영역 */
+.aside_ul{ width: 100%;}
+.aside_li{ width: 100%; text-align: center; line-height: 40px;}
+.aside_a{ display: block; font-size: 14px; line-height: 40px; color: #333;}
+
+/* 하단영역 */
+.footer_info{ font-size: 14px; line-height: 40px; color: #fff;}
+
+/* qna - 자주묻는질문 아코디언 */
+.accordion { background-color: #eee;color: #444; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 15px; transition: 0.4s;}
+.accordion-active, .accordion:hover { background-color: #ccc;}
+.accordion-panel { padding: 0 18px; background-color: white; max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out;}
+
+/* table style */
+table{ min-width: 700px; width: 100%; max-width: 1200px; border: none;}
+.tit-board{ min-width: 700px; width: 100%; max-width: 1200px; text-align: left; font-size: 20px; line-height: 60px;}
+.con-info{ min-width: 700px; width: 100%; max-width: 1200px;}
+.con-info span{ display: block; line-height: 20px;}
+.con-info strong{ line-height: 20px;}
+.con-block{ font-size: 15px; line-height: 30px;}
+
+.btn-box{ min-width: 700px; width: 100%; max-width: 1200px;}
+.btn-box .btn-item{ background-color: #6db33f; border: none; color: #fff; font-size: 14px; padding: 4px 10px; float: right; margin: 0 2px; border-radius: 3px;}
+
+
+/* 댓글 수정/삭제 스타일*/
+#commentsbox{margin-bottom:15px;}
+.upbtn .delbtn{padding:2px;}
+@media all and (max-width:900px) {
+	aside{ display: none;}
+}

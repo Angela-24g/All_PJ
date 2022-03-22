@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<configuration>
+	<typeAliases>
+	  <typeAlias alias="member77" type="co.kr.ysmb.dto.MemberDTO"/>
+	  <typeAlias alias="Board77" type="co.kr.ysmb.dto.BoardDTO"/>
+	  <typeAlias alias="NBoard" type="co.kr.ysmb.dto.NBoardDTO"/>
+ 	  <typeAlias alias="Comment" type="co.kr.ysmb.dto.CommentDTO"/>
+	  <typeAlias alias="Imgs" type="co.kr.ysmb.dto.ImgDTO"/>	 
+	  <typeAlias alias="Appl" type="co.kr.ysmb.dto.ApplDTO"/>	 
+ 	  <typeAlias alias="Cmt" type="co.kr.ysmb.dto.CmtDTO"/>	
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="/mybatis/member.xml"/>
+		<mapper resource="/mybatis/board.xml"/>
+		<mapper resource="/mybatis/nboard.xml"/>
+	    <mapper resource="/mybatis/comment.xml"/> 
+		<mapper resource="/mybatis/imgs.xml"/>	
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+  <!-- id중복체크, 내정보 수정  -->
+  <select id="selectOne" parameterType="String" resultType="member77"> 
+   select * from member
+   where id=#{id}
+  </select>
+  
+  <!-- 회원가입 -->
+  <insert id="insertMember" parameterType="co.kr.ysmb.dto.MemberDTO">         
+    insert into member(id,pw,name,email,tel,zipcode,addr,addr2,regdate)
+    values(#{id},#{pw},#{name},#{email},#{tel},#{zipcode},#{addr},#{addr2},NOW())
+  </insert>
+  
+  <!-- 로그인,map사용 -->
+  <select id="selectLogin" parameterType="map" resultType="co.kr.ysmb.dto.MemberDTO">
+    select * from member
+    where id=#{id} and pw=#{pw}
+  </select>
+  <!-- 이름으로 ID찾기 -->
+  <select id="findIDbyNameTel" parameterType="map" resultType="String">
+  	select id from member where name=#{name} and tel=#{tel}
+  </select>
+  <!-- 이름으로 번호찾기 -->
+  <select id="findbyName" parameterType="String" resultType="int">
+  	select mno from member where name=#{name}
+  </select>
+  <!-- 번호로 이름찾기 -->
+  <select id="findbyNo" parameterType="int" resultType="String">
+  	select name from member where mno=#{mno}
+  </select>
+  <!-- 번호로 memberdto찾기 -->
+  <select id="findDtobyNo" parameterType="int" resultType="member77">
+  	select * from member where mno=#{mno}
+  </select>
+  <!-- 회원 전체 데이터 출력(조건 없이) -->
+  <select id="selectAll" resultType="member77">
+  	select * from member 
+  </select>
+  <!-- 내 정보 수정  -->
+  <update id="memberUpdate" parameterType="co.kr.ysmb.dto.MemberDTO">
+   update member
+   set pw=#{pw},name=#{name},email=#{email},tel=#{tel},zipcode=#{zipcode},
+   addr=#{addr},addr2=#{addr2}
+   where id=#{id}
+  </update>
+  
+  <!-- 탈퇴 -->
+  <delete id="memberDelete" parameterType="String">
+   delete from member
+   where id=#{id}
+  </delete>
+</mapper>
+
+
+
+<!-- 정리: resultType, parameterType: 별칭으로, 컨트롤러에서 사용할 수가 있다. -->

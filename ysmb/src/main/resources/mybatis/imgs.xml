@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="imgs">
+	<!-- 이미지 저장하기 -->
+	<insert id="saveImg" parameterType="Imgs">
+		insert into imgs(bno,url,document,thumb,iwdate) values(#{bno},#{url},#{document},#{thumb},NOW())
+	</insert>
+	<!-- 해당 번호의 이미지 가져오기(이건 nboard의 조인조건과 잘 봐야함) -->
+	<select id="selectImg" parameterType="int" resultType="Imgs">
+		select * from imgs where bno=#{bno}
+	</select>
+	<!-- 전체 글 개수 -->
+	<select id="selectAllCount" resultType="int">
+		select count(*) from imgs 
+	</select>
+	<!-- 해당 글 번호의 개수를 가져와서 현재 번호에서 뺄 것을 대비 -->
+	<select id="selectCount" parameterType="int" resultType="int">
+		select count(*) from imgs where bno=#{bno}
+	</select>
+	<!-- 해당 이미지 썸네일로 등록하기 -->
+	<update id="updateImg" parameterType="Imgs">
+		update imgs set thumb=#{thumb} where no=#{no}
+	</update>
+	<!-- 이미지 삭제하기(url로 매칭시키기) -->
+	<delete id="deleteImg" parameterType="String">
+		delete from imgs where url=#{url}
+	</delete>
+	<!-- 이미지 삭제하기(글번호로 매칭시키기) -->
+	<delete id="delImgbyNo" parameterType="int">
+		delete from imgs where bno=#{bno}
+	</delete>
+</mapper>

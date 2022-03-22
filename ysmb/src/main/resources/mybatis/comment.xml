@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+
+	
+	<!-- comment 댓글 수 -->
+	<select id="ccountDao" parameterType="int" resultType="int">
+		select count(*) from comment where board_no=#{board_no}
+	</select>
+	
+	<!-- comment 불러오기(리스트) -->
+	<!-- 글 리스트 dto로 작업하기 좀 그런거는 map을 이용한다. -->
+ <select id="listDao" parameterType="java.util.Map" resultType="co.kr.ysmb.dto.CommentDTO">    
+		select * from comment where board_no=#{board_no} order by wdate desc limit #{start},#{cnt}
+	</select> 
+	<!-- 이 앞에는 실제로 comment를 쓰는 것이니, comment 데이터에 대한 사항을 넣을 것(원래 쓸 데이터)-->
+  <resultMap type="Cmt" id="getApplList">
+  <result property="no" column="no"></result>
+  <result property="contents" column="contents"></result>
+  <result property="wdate" column="wdate"></result>
+  <result property="writer" column="writer"></result> 
+  <result property="board_no" column="board_no"></result> 
+  <!-- collection은, 연관지을 데이터를 나타내는 거라, 참조할 데이터 넣기 -->       
+  <collection property="board77" column="{num=no}" javaType="java.util.ArrayList" ofType="Board77" select="getBoardList"></collection>
+  </resultMap>
+	<!-- 여기는, 코멘트의 데이터를 넣을 것 -> 원래의 데이터 -->
+	<select id="findCmtList" resultMap="getApplList">
+    SELECT no,contents,wdate,board_no FROM comment where board_no=#{board_no} order by wdate desc limit #{start},#{cnt}
+  	</select>
+  	<!-- 여기에는 comment와 연관시킬 데이터를(가져올 데이터) 넣을 것(아마 사용자 이름이 될듯) -> 참조할 데이터  -->
+	<select id="getBoardList" resultType="java.util.Map">
+    SELECT writer FROM board where num=#{no}
+ 	 </select>
+
+	<select id="selectOne" parameterType="int" resultType="int">
+		select writer from comment where no=#{no}
+	</select>
+	
+	<!-- comment 삭제하기 -->
+	<delete id="deleteDao" parameterType="int">
+		delete from comment where no=#{no}
+	</delete>
+	<!-- comment 수정하기 -->
+	<update id="updateDao" parameterType="Comment">
+		update comment set contents=#{contents} where no=#{no}
+	</update>
+	
+	<!-- comment 등록하기 -->
+	<insert id="insertDao" parameterType="Comment" useGeneratedKeys="true" keyProperty="no">
+	 insert into comment(contents,wdate,writer,board_no) values(#{contents},NOW(),#{writer.no},#{board_no.num}) 
+	</insert>
+	
+	
+</mapper>

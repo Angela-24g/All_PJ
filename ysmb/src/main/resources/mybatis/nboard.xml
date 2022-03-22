@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nboard">
+<!-- 리스트 뽑기 -->
+<select id="nlistDao" parameterType="map" resultType="NBoard">
+	select * from nboard where document=#{document} order by nwdate desc limit #{start}, #{cnt}
+</select>
+<!-- 총 글의 개수 구하기 -->
+<select id="countDao" parameterType="int" resultType="int">
+	select count(*) from nboard where document=#{document}
+</select>
+<!-- 공지사항 글 삽입 -->
+<insert id="ninsertDao" parameterType="NBoard" useGeneratedKeys="true" keyProperty="no"> 
+	insert into nboard(title,ncontent,nwdate,document,rcount,nwriter) values(#{title},#{ncontent},NOW(),#{document},#{rcount},#{nwriter})
+</insert>
+<!-- 공지사항 글 가져오기(선택 값 넣고) -->
+<select id="selectData" parameterType="int" resultType="NBoard">
+	select * from nboard where no=#{no}
+</select>
+<!-- 공지사항 글 가져오기 -->
+<!--<select id="ndataDao" resultType="co.kr.ysmb.dto.ApplDTO">
+	select * from nboard left join imgs on nboard.no=imgs.bno 
+</select>-->
+
+<resultMap type="Appl" id="getApplList">
+  <result property="no" column="no"></result>
+  <result property="title" column="title"></result>
+  <result property="content" column="content"></result>
+  <result property="nwdate" column="nwdate"></result>
+  <result property="document" column="document"></result>
+  <collection property="imgs" column="{no=no}" javaType="java.util.ArrayList" ofType="Imgs" select="getImgList"></collection>
+</resultMap>
+
+<select id="ImgList" parameterType="map" resultMap="getApplList">
+    SELECT no,title,ncontent,nwdate,nwriter FROM nboard where document=#{document}  order by nwdate desc limit #{start}, #{cnt}
+  </select>
+<select id="findImgListCondition" parameterType="Appl" resultMap="getApplList">
+    SELECT no,title,ncontent,nwdate FROM nboard where document=#{document} and no=#{no}
+  </select>
+<select id="findImgList" parameterType="int" resultMap="getApplList">
+    SELECT no,title,ncontent,nwdate FROM nboard where document=#{document} 
+  </select>
+<select id="getImgList" resultType="java.util.Map">
+    SELECT no,bno,url,thumb FROM imgs where bno=#{no} 
+  </select>
+
+
+<!-- JOIN -->
+
+
+<!-- <resultMap type="Imgs" id="imgs">
+  <result property="no" column="no"></result>
+   <result property="bno" column="bno"></result>
+  <result property="url" column="url"></result>
+  <result property="document" column="document"></result>
+</resultMap>
+<resultMap type="NBoard" id="nboard">
+  <result property="no" column="no"></result>
+   <result property="title" column="title"></result>
+  <result property="ncontent" column="ncontent"></result>
+  <result property="nwdate" column="nwdate"></result>
+  <result property="document" column="document"></result>
+ <collection property="imgs" column="{document=document, imgs=imgs}" javaType="java.util.ArrayList" ofType="Imgs" select="getImgList"></collection>
+</resultMap>
+<select id="getImgList" resultType="Appl">
+	select bno, url from imgs where document=#{document}
+</select>
+<select id="findImgList1" parameterType="int" resultType="Appl">
+	select title, ncontent, nwdate from nboard where document=#{document}
+</select>
+ -->
+ <select id="infoDao" parameterType="int" resultType="NBoard">
+ select * from nboard where document=1 and no=#{no}
+ </select>
+ 
+ 
+ 
+<!-- 조회수 증가 -->
+<update id="upcount" parameterType="NBoard">
+	update nboard set rcount=#{rcount}+1 where no=#{no}
+</update>
+<!-- 공지사항 글 수정 -->
+<update id="nupdateDao" parameterType="NBoard">
+	update nboard set title=#{title}, ncontent=#{ncontent} where no=#{no}
+</update>
+<!-- 공지사항 글 삭제 -->
+<delete id="ndeleteDao" parameterType="NBoard">
+	delete from nboard where no=#{no}
+</delete>
+</mapper>
