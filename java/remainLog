@@ -147,7 +147,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
  > 로그를 남길 수 있는 어노테이션
  
- Logger logger = LoggerFactory.getLogger("chapters.introduction.HelloWorld2"); //이거는 회사 로거 부분 참고해서 수정하기
+ private static final Logger LOGGER = LoggerFactory.getLogger(servicename.class); //servicename은 해당하는 서비스를 넣으면 됨
 
  log.info("App:run"); > 얘는 sysout처럼 로그를 남길 수 있다(위의 설정처럼 console에 하겠다 하면 콘솔에서 데이터 로그가 찍힌다.)
  log.info("data[]",data); > 이렇게 함으로써, data[data] 이런식으로 데이터를 나타낼 수 있다.
