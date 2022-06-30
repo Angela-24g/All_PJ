@@ -1,0 +1,7 @@
+1. 404 server error
+2. 500 error
+3. bindingcomplete :
+    1) bindingcomplete handler를 이용하는 경우
+    2) $("#jqxGrid").on("bindingcomplete")를 이용한 해결
+    
+4. 
