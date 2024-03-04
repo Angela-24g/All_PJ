@@ -1,0 +1,43 @@
+### server info ###
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force-response: true
+spring:
+  profiles:
+    active: dev
+  devtools:
+    livereload:
+      enabled: false
+  ### JSP ###
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 604800  # 7day
+  ### datasource config ###
+  datasource:
+    primary:
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+      jdbc-url: jdbc:log4jdbc:tibero:thin:@(DESCRIPTION=(failover=on)(load_balance=on)(address_list=(address=(host=192.168.211.66)(port=8629))(address=(host=192.168.211.67)(port=8629)))(database_name=SEOUL_V2X))
+      username: seoul_cits
+      password: seoul_cits
+  messages:
+    basename: messages/messages
+    encoding: UTF-8
+  servlet:
+    multipart:
+      file-size-threshold: 2MB
+      location: ./temp
+      max-file-size: 50MB
+      max-request-size: 200MB
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss
+    time-zone: Asia/Seoul
+
+
